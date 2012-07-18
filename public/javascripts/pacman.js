@@ -45,7 +45,7 @@ Crafty.c( 'pacman', {
             var w = this.attr( 'w' );
             var h = this.attr( 'h' );
 
-            if( this.hit( 'WallCube' ) || newX < 0 || newX > ( 600 - w ) || newY < 0 || newY > ( 300 - h ) ){
+            if( this.hit( 'WallCube' ) ){
 
                 this.attr({
                     x: from.x,

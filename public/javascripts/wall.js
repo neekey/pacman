@@ -7,7 +7,7 @@
     Crafty.c( 'WallCube', {
         init: function(){
             this.requires( '2D, Canvas, Solid, Color' );
-            this.color( 'red' ).attr({ w: 32, h: 32 });
+            this.color( '#999999' ).attr({ w: 32, h: 32 });
         },
         wallCube: function( config ){
             

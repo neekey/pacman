@@ -2,9 +2,9 @@ requirejs.config({
     baseUrl: '/javascripts/'
 });
 
-requirejs( [ 'crafty-min', 'wall', 'pacman' ], function(){
+requirejs( [ 'crafty-min', 'map', 'wall', 'pacman' ], function(){
     Crafty.init( 640, 320 );
-    Crafty.background('rgb(127,127,127)');
+    Crafty.background('rgb(255,255,255)');
 
     Crafty.c("RandomPosition", {
         init: function() {
@@ -20,15 +20,26 @@ requirejs( [ 'crafty-min', 'wall', 'pacman' ], function(){
             down: [ 6, 0 ]
         });
 
-    Crafty.e( '2D, Canvas, pacman, RandomPosition' );
+    Crafty.e( '2D, Canvas, pacman, RandomPosition' ).attr({ x: 32, y: 32 });
+
+    var mapGenerator = Crafty.e( 'MapGenerator' );
 
     Crafty.e( 'Wall' ).wall({
-        map: [
-            [ 1, 0, 1 ],
-            [ 1, 0, 1 ],
-            [ 1, 0, 1 ]
-        ]
+        map: mapGenerator.randomMap( 20, 10 ) 
     });
+
+    var _map = [
+            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
+            [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
+            [ 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1 ],
+            [ 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1 ],
+            [ 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1 ],
+            [ 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1 ],
+            [ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1 ],
+            [ 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1 ],
+            [ 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1 ],
+            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
+        ];
 });
 
 
