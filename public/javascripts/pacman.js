@@ -3,7 +3,11 @@
 Crafty.c( 'pacman', {
     init: function(){
         this.requires( 'idle, SpriteAnimation, Collision, Fourway' )
-        this.fourway( 3 )
+        this.fourway( 2 );
+        this.attr({
+            w: 25,
+            h: 25
+        });
 
         // 设置移动动画
         this.animate( 'walk_left', 0, 0, 1 )
@@ -41,7 +45,7 @@ Crafty.c( 'pacman', {
             var w = this.attr( 'w' );
             var h = this.attr( 'h' );
 
-            if( newX < 0 || newX > ( 600 - w ) || newY < 0 || newY > ( 300 - h ) ){
+            if( this.hit( 'WallCube' ) || newX < 0 || newX > ( 600 - w ) || newY < 0 || newY > ( 300 - h ) ){
 
                 this.attr({
                     x: from.x,

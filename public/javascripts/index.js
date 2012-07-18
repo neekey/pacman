@@ -2,8 +2,8 @@ requirejs.config({
     baseUrl: '/javascripts/'
 });
 
-requirejs( [ 'crafty-min', 'pacman' ], function(){
-    Crafty.init(600, 300);
+requirejs( [ 'crafty-min', 'wall', 'pacman' ], function(){
+    Crafty.init( 640, 320 );
     Crafty.background('rgb(127,127,127)');
 
     Crafty.c("RandomPosition", {
@@ -21,6 +21,14 @@ requirejs( [ 'crafty-min', 'pacman' ], function(){
         });
 
     Crafty.e( '2D, Canvas, pacman, RandomPosition' );
+
+    Crafty.e( 'Wall' ).wall({
+        map: [
+            [ 1, 0, 1 ],
+            [ 1, 0, 1 ],
+            [ 1, 0, 1 ]
+        ]
+    });
 });
 
 
