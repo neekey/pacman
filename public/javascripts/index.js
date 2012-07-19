@@ -2,7 +2,7 @@ requirejs.config({
     baseUrl: '/javascripts/'
 });
 
-requirejs( [ 'crafty-min', 'map', 'wall', 'pacman' ], function(){
+requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'pacman' ], function(){
     Crafty.init( 640, 320 );
     Crafty.background('rgb(255,255,255)');
 

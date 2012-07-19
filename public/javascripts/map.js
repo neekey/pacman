@@ -149,13 +149,269 @@
                 }
             }
 
-            // 根据连续信息，对分离的块进行合并
-            
+            // 对结果进行验证 仅用于测试
+            setTimeout((function( that ){
+
+                return function(){
+
+                    that.randomMapCheck( blocks );
+
+                };
+
+            })( this ), 5000 );
 
             console.log( blocks, blockTags );
 
+            // 将各个独立的连续区域进行连接
+            var blocksInfos = {};
+
+            // 先计算每个区块的重心，四个极值点
+            var tagName;
+            var targetTag;
+            var blockEdge;
+            var centerP;
+            var leftP;
+            var topP;
+            var rightP;
+            var bottomP;
+            var block;
+            var i;
+            var sumRow;
+            var sumCol;
+            var cube;
+            var centerDis;
+
+            for( tagName in blocks ){
+
+                block = blocks[ tagName ];
+
+
+                // 重置
+                leftP = topP = rightP = bottomP = undefined;
+                centerP = undefined;
+                sumCol = sumRow = 0;
+                blockEdge = [];
+
+                for( i = 0; i < block.length; i++ ){
+
+                    cube = block[ i ];
+
+                    // 判断是否为边界点
+                    if( mapArray[ cube[ 0 ] - 1 ][ cube[ 1 ] - 1 ] === 1 ||
+                        mapArray[ cube[ 0 ] - 1 ][ cube[ 1 ] ]=== 1 ||
+                        mapArray[ cube[ 0 ] - 1 ][ cube[ 1 ] + 1 ] === 1 ||
+                        mapArray[ cube[ 0 ] ][ cube[ 1 ] + 1 ] === 1 ||
+                        mapArray[ cube[ 0 ] + 1 ][ cube[ 1 ] + 1 ] === 1 ||
+                        mapArray[ cube[ 0 ] + 1 ][ cube[ 1 ] ] === 1 ||
+                        mapArray[ cube[ 0 ] + 1 ][ cube[ 1 ] - 1 ] === 1 ||
+                        mapArray[ cube[ 0 ] ][ cube[ 1 ] - 1 ] === 1 ){
+
+                        blockEdge.push( cube );
+                    }
+
+                    sumRow += cube[ 0 ];
+                    sumCol += cube[ 1 ];
+
+                    if( leftP === undefined ){
+                        leftP = cube
+                    }
+                    else {
+
+                        if( leftP[ 0 ] > cube[ 0 ] ){
+                            leftP = cube;
+                        }
+                    }
+
+                    if( topP === undefined ){
+
+                        topP = cube;
+                    }
+                    else {
+
+                        if( topP[ 1 ] > cube[ 1 ] ){
+
+                            topP = cube;
+                        }
+                    }
+
+                    if( rightP === undefined ){
+
+                        rightP = cube;
+                    }
+                    else {
+
+                        if( rightP[ 0 ] < cube[ 0 ] ){
+
+                            rightP = cube;
+                        }
+                    }
+
+                    if( bottomP === undefined ){
+
+                        bottomP = cube;
+                    }
+                    else {
+
+                        if( bottomP[ 1 ] < cube[ 1 ] ){
+
+                            bottomP = cube;
+                        }
+                    }
+                }
+
+                blocksInfos[ tagName ] = {
+                    left: leftP,
+                    top: topP,
+                    right: rightP,
+                    bottom: bottomP,
+                    center: [ parseInt( sumRow / block.length ), parseInt( sumCol / block.length ) ],
+                    edge: blockEdge
+                };
+            }
+
+            var blockInfoA;
+            var blockInfoB;
+            var centerDisTmp;
+            var targetBlockTag;
+            var centerA;
+            var centerB;
+            var connectA;
+            var connectB;
+            var connectDis;
+            var connectDisTemp;
+            var edgeA;
+            var edgeB;
+            var blockConnectInfo = {};
+
+            for( tagName in blocks ){
+
+                centerDis = undefined;
+                blockInfoA = blocksInfos[ tagName ];
+                centerA = blockInfoA.center;
+                if( blockConnectInfo[ tagName ] === undefined ){
+
+                    blockConnectInfo[ tagName ] = '';
+                }
+
+                // 寻找和自己重心最近的
+                for( targetTag in blocks ){
+
+                    // 不是自身，同时又是没有连同的区域
+                    if( targetTag !== tagName && blockConnectInfo[ tagName ].indexOf( '@' + targetBlockTag + '@' ) < 0 ){
+
+                        blockInfoB = blocksInfos[ targetTag ];
+                        centerB = blockInfoB.center;
+                        centerDisTmp = Math.sqrt( Math.pow( centerA[ 0 ] - centerB[ 0 ], 2 ) + Math.pow( centerA[ 1 ] - centerB[ 1 ], 2 ) );
+
+                        if( centerDis === undefined ){
+
+                            centerDis = centerDisTmp;
+                            targetBlockTag = targetTag;
+                        }   
+                        else {
+
+                            if( centerDis > centerDisTmp ){
+
+                                centerDis = centerDisTmp;
+                                targetBlockTag = targetTag;
+                            }
+                        }
+                    }
+                }
+
+                // 和找到的块进行连接
+                edgeA = blockInfoA.edge;
+                blockInfoB = blocksInfos[ targetBlockTag ];
+                edgeB = blockInfoB.edge;
+                connectDis = undefined;
+                
+                _.each( edgeA, function( cubeA ){
+
+                    _.each( edgeB, function( cubeB ){
+
+                        connectDisTemp = Math.sqrt( Math.pow( cubeA[ 0 ] - cubeB[ 0 ], 2 ) + Math.pow( cubeA[ 1 ] - cubeB[ 1 ], 2 ) );
+
+                        if( connectDis ===  undefined || connectDis > connectDisTemp ){
+
+                            connectDis = connectDisTemp;
+
+                            connectA = cubeA;
+                            connectB = cubeB;
+                        }
+                    });
+                });
+
+                // 将这两个点连接起来
+                // 从A到B
+                var cntARow = connectA[ 0 ];
+                var cntBRow = connectB[ 0 ];
+                var cntACol = connectA[ 1 ];
+                var cntBCol = connectB[ 1 ];
+                var moveRow = cntARow;
+                var moveCol = cntACol;
+
+                var itrRow = ( cntBRow - cntARow > 0 ) ? 1 : - 1;
+                var itrCol = ( cntBCol - cntACol > 0 ) ? 1 : - 1;
+
+                while( moveRow !== cntBRow && moveCol !== cntBCol ){
+
+                    if( moveRow !== cntBRow ){
+
+                        moveRow += itrRow;
+
+                        mapArray[ moveRow ][ moveCol ] = 0;
+                    }
+
+                    if( moveCol !== cntBCol ){
+
+                        moveCol += itrCol;
+
+                        mapArray[ moveRow ][ moveCol ] = 0;
+                    }
+                }
+
+                blockConnectInfo[ tagName ]+= '@' + targetTag + '@';
+
+                _.each( blockConnectInfo, function( connectStr, tag ){
+
+                    if( connectStr.indexOf( '@' + tagName + '@' ) ){
+
+                        blockConnectInfo[ tag ]+= '@' + targetTag + '@';
+                    }
+                })
+                
+            }
+
 
             return mapArray;
+        },
+
+        randomMapCheck: function( blocks ){
+
+            // 根据连续信息，对分离的块进行合并
+            // 测试 将
+            var block;
+            var tagName;
+            var baseColor = parseInt( 99999 * Math.random() + 100000 );
+
+            for( tagName in blocks ){
+
+                block = blocks[ tagName ];
+
+                for( i = 0; i < block.length; i++ ){
+
+                    Crafty.e( 'WallCube' ).wallCube({
+                        x: block[ i ][ 1 ] * 32,
+                        y: block[ i ][ 0 ] * 32,
+                        color: '#' + ( baseColor + tagName * 10000 + tagName * 1000 + tagName * 100 + tagName * 10 )
+                    });
+
+                    Crafty.e("2D, DOM, Text").attr({
+                        x: block[ i ][ 1 ] * 32,
+                        y: block[ i ][ 0 ] * 32
+                    }).text( tagName );
+                }
+            }   
         }
     });
 })();

@@ -29,6 +29,10 @@
 
                 this.attr( { y: config.y } );
             }
+
+            if( config.color ){
+                this.color( config.color );
+            }
         }
     });
 
