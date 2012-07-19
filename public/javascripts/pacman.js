@@ -1,6 +1,6 @@
 (function(){
 
-Crafty.c( 'pacman', {
+Crafty.c( 'Pacman', {
     init: function(){
         this.requires( 'idle, SpriteAnimation, Collision, Fourway' )
         this.fourway( 2 );

@@ -2,9 +2,9 @@ requirejs.config({
     baseUrl: '/javascripts/'
 });
 
-requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'pacman' ], function(){
+requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'bean', 'pacman' ], function(){
     Crafty.init( 640, 320 );
-    Crafty.background('rgb(255,255,255)');
+    Crafty.background('#0571a9');
 
     Crafty.c("RandomPosition", {
         init: function() {
@@ -13,20 +13,41 @@ requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'pacman' ], function(){
     });
 
     Crafty.sprite(32, "/images/pacman.png", {
-            idle: [ 1, 0 ],
-            left: [ 0, 0 ],
-            up: [ 2, 0 ],
-            right: [ 4, 0 ],
-            down: [ 6, 0 ]
-        });
+        idle: [ 1, 0 ],
+        left: [ 0, 0 ],
+        up: [ 2, 0 ],
+        right: [ 4, 0 ],
+        down: [ 6, 0 ]
+    });
 
-    Crafty.e( '2D, Canvas, pacman, RandomPosition' ).attr({ x: 32, y: 32 });
+    Crafty.sprite(15, "/images/bean.png", {
+        bean: [ 0, 0 ]
+    });
+
+    Crafty.sprite(32, "/images/wall.png", {
+        wall: [ 0, 0 ]
+    });
+
+    Crafty.e( '2D, Canvas, Pacman, RandomPosition' ).attr({ x: 32, y: 32 });
 
     var mapGenerator = Crafty.e( 'MapGenerator' );
+    var mapArray = mapGenerator.randomMap( 20, 10 );
 
     Crafty.e( 'Wall' ).wall({
-        map: mapGenerator.randomMap( 20, 10 ) 
+        map: mapArray 
     });
+
+    _.each( mapArray, function( rows, row ){
+
+        _.each( rows, function( ifWall, col ){
+
+            if( ifWall === 0 ){
+
+                // 画一颗豆子
+                Crafty.e( 'Bean' ).bean( col * 32 + 10, row * 32 + 10 );
+            }
+        })
+    })
 
     var _map = [
             [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],

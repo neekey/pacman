@@ -6,8 +6,16 @@
 
     Crafty.c( 'WallCube', {
         init: function(){
-            this.requires( '2D, Canvas, Solid, Color' );
-            this.color( '#999999' ).attr({ w: 32, h: 32 });
+            this.requires( '2D, Canvas, Solid, wall, SpriteAnimation' );
+            this.attr({ w: 32, h: 32 });
+            this.animate( 'wallBlink', 0, 0, 2 );
+
+            var that = this;
+            setTimeout(function(){
+
+                that.animate( 'wallBlink', 100, -1 );
+            }, parseInt( 5000 * Math.random() ));
+
         },
         wallCube: function( config ){
             
@@ -31,7 +39,7 @@
             }
 
             if( config.color ){
-                this.color( config.color );
+                // this.color( config.color );
             }
         }
     });
