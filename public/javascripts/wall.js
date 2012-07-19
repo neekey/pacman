@@ -8,13 +8,26 @@
         init: function(){
             this.requires( '2D, Canvas, Solid, wall, SpriteAnimation' );
             this.attr({ w: 32, h: 32 });
-            this.animate( 'wallBlink', 0, 0, 2 );
+            this.animate( 'wallBlink', 0, 0, 3 );
 
             var that = this;
-            setTimeout(function(){
 
-                that.animate( 'wallBlink', 100, -1 );
-            }, parseInt( 5000 * Math.random() ));
+            (function(){
+
+                var recall = arguments.callee;
+                that.stop();
+
+                setTimeout(function(){
+                    
+                    that.animate( 'wallBlink', 25, -1 );
+
+                    setTimeout(function(){
+
+                        recall();
+                    }, 800 * Math.random() );
+                }, parseInt( 500 * Math.random() ));
+
+            })();
 
         },
         wallCube: function( config ){

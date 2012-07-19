@@ -6,13 +6,20 @@ requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'bean', 'pacman' ], func
     Crafty.init( 640, 320 );
     Crafty.background('#0571a9');
 
+    Crafty.audio.add({
+        bgMusic: [
+            "/audios/bg.mp3",
+            "/audios/bg.ogg"
+        ]
+    });
+
     Crafty.c("RandomPosition", {
         init: function() {
             this.attr({ x: Crafty.math.randomInt(50,350), y: Crafty.math.randomInt(50,300) });
         }
     });
 
-    Crafty.sprite(32, "/images/pacman.png", {
+    Crafty.sprite(32, "/images/pacman-copy.png", {
         idle: [ 1, 0 ],
         left: [ 0, 0 ],
         up: [ 2, 0 ],
@@ -28,10 +35,10 @@ requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'bean', 'pacman' ], func
         wall: [ 0, 0 ]
     });
 
-    Crafty.e( '2D, Canvas, Pacman, RandomPosition' ).attr({ x: 32, y: 32 });
 
     var mapGenerator = Crafty.e( 'MapGenerator' );
     var mapArray = mapGenerator.randomMap( 20, 10 );
+    var pacman;
 
     Crafty.e( 'Wall' ).wall({
         map: mapArray 
@@ -43,11 +50,22 @@ requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'bean', 'pacman' ], func
 
             if( ifWall === 0 ){
 
-                // 画一颗豆子
-                Crafty.e( 'Bean' ).bean( col * 32 + 10, row * 32 + 10 );
+                if( pacman === undefined ){
+
+                    pacman = Crafty.e( '2D, Canvas, Pacman, RandomPosition' ).attr({ x: col * 32, y: row * 32 });
+                }
+                else {
+
+                    // 画一颗豆子
+                    Crafty.e( 'Bean' ).bean( col * 32 + 10, row * 32 + 10 );  
+                }
             }
         })
-    })
+    });
+
+    Crafty.audio.play( 'bgMusic', -1, 0.1 );
+
+
 
     var _map = [
             [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],

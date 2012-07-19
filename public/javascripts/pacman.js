@@ -1,5 +1,12 @@
 (function(){
 
+Crafty.audio.add({
+    eat: [
+        "/audios/eat.mp3",
+        "/audios/eat.ogg"
+    ]
+});
+
 Crafty.c( 'Pacman', {
     init: function(){
         this.requires( 'idle, SpriteAnimation, Collision, Fourway' )
