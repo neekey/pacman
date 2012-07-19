@@ -154,7 +154,7 @@
 
                 return function(){
 
-                    that.randomMapCheck( blocks );
+                    // that.randomMapCheck( blocks );
 
                 };
 
@@ -166,35 +166,16 @@
             var blocksInfos = {};
 
             // 先计算每个区块的重心，四个极值点
-            var tagName;
-            var targetTag;
-            var blockEdge;
-            var centerP;
-            var leftP;
-            var topP;
-            var rightP;
-            var bottomP;
-            var block;
-            var i;
-            var sumRow;
-            var sumCol;
-            var cube;
-            var centerDis;
+            _.each( blocks, function( block, tagName ){
 
-            for( tagName in blocks ){
+                // 区块的所有边界点
+                var blockEdge = [];
+                // 区块重心点
+                var centerP;
+                var sumRow = 0;
+                var sumCol = 0;
 
-                block = blocks[ tagName ];
-
-
-                // 重置
-                leftP = topP = rightP = bottomP = undefined;
-                centerP = undefined;
-                sumCol = sumRow = 0;
-                blockEdge = [];
-
-                for( i = 0; i < block.length; i++ ){
-
-                    cube = block[ i ];
+                _.each( block, function( cube ){
 
                     // 判断是否为边界点
                     if( mapArray[ cube[ 0 ] - 1 ][ cube[ 1 ] - 1 ] === 1 ||
@@ -211,119 +192,77 @@
 
                     sumRow += cube[ 0 ];
                     sumCol += cube[ 1 ];
-
-                    if( leftP === undefined ){
-                        leftP = cube
-                    }
-                    else {
-
-                        if( leftP[ 0 ] > cube[ 0 ] ){
-                            leftP = cube;
-                        }
-                    }
-
-                    if( topP === undefined ){
-
-                        topP = cube;
-                    }
-                    else {
-
-                        if( topP[ 1 ] > cube[ 1 ] ){
-
-                            topP = cube;
-                        }
-                    }
-
-                    if( rightP === undefined ){
-
-                        rightP = cube;
-                    }
-                    else {
-
-                        if( rightP[ 0 ] < cube[ 0 ] ){
-
-                            rightP = cube;
-                        }
-                    }
-
-                    if( bottomP === undefined ){
-
-                        bottomP = cube;
-                    }
-                    else {
-
-                        if( bottomP[ 1 ] < cube[ 1 ] ){
-
-                            bottomP = cube;
-                        }
-                    }
-                }
-
+                });
+                
                 blocksInfos[ tagName ] = {
-                    left: leftP,
-                    top: topP,
-                    right: rightP,
-                    bottom: bottomP,
                     center: [ parseInt( sumRow / block.length ), parseInt( sumCol / block.length ) ],
                     edge: blockEdge
                 };
-            }
+            });
 
-            var blockInfoA;
-            var blockInfoB;
-            var centerDisTmp;
-            var targetBlockTag;
-            var centerA;
-            var centerB;
-            var connectA;
-            var connectB;
-            var connectDis;
-            var connectDisTemp;
-            var edgeA;
-            var edgeB;
+            // 对区块进行连接
             var blockConnectInfo = {};
 
-            for( tagName in blocks ){
+            _.each( blocks, function( blockA, tagName ){
 
-                centerDis = undefined;
-                blockInfoA = blocksInfos[ tagName ];
-                centerA = blockInfoA.center;
+                var blockInfoA = blocksInfos[ tagName ];
+                var blockInfoB;
+                // 两个区块重心距离
+                var centerDis;
+                var centerA = blockInfoA.center;
+                var centerB;
+                var centerDisTmp;
+                // 最终选取的进行连接的区块的tag
+                var targetBlockTag;
+                // 进行连接的点
+                var connectA;
+                // 进行连接的点
+                var connectB;
+                var connectDis;
+                var connectDisTemp;
+                var edgeA;
+                var edgeB;
+
                 if( blockConnectInfo[ tagName ] === undefined ){
 
                     blockConnectInfo[ tagName ] = '';
                 }
 
-                // 寻找和自己重心最近的
-                for( targetTag in blocks ){
+                // 需要需要进行连接的区块
+                _.each( blocks, function( blockB, targetTag ){
 
                     // 不是自身，同时又是没有连同的区域
-                    if( targetTag !== tagName && blockConnectInfo[ tagName ].indexOf( '@' + targetBlockTag + '@' ) < 0 ){
+                    // console.log( targetTag + ' check: ' + blockConnectInfo[ targetTag ] );
+                    if( targetTag !== tagName && blockConnectInfo[ tagName ].indexOf( '@' + targetTag + '@' ) < 0 ){
+
+                        if( blockConnectInfo[ targetTag ] === undefined ){
+
+                            blockConnectInfo[ targetTag ] = '';
+                        }
 
                         blockInfoB = blocksInfos[ targetTag ];
                         centerB = blockInfoB.center;
                         centerDisTmp = Math.sqrt( Math.pow( centerA[ 0 ] - centerB[ 0 ], 2 ) + Math.pow( centerA[ 1 ] - centerB[ 1 ], 2 ) );
 
-                        if( centerDis === undefined ){
+                        if( centerDis === undefined || centerDis > centerDisTmp ){
 
                             centerDis = centerDisTmp;
                             targetBlockTag = targetTag;
-                        }   
-                        else {
-
-                            if( centerDis > centerDisTmp ){
-
-                                centerDis = centerDisTmp;
-                                targetBlockTag = targetTag;
-                            }
                         }
                     }
+                });
+
+                console.log( tagName + ' <-> ' +  targetBlockTag );
+
+                if( targetBlockTag === undefined ){
+
+                    return;
                 }
 
                 // 和找到的块进行连接
                 edgeA = blockInfoA.edge;
                 blockInfoB = blocksInfos[ targetBlockTag ];
                 edgeB = blockInfoB.edge;
-                connectDis = undefined;
                 
                 _.each( edgeA, function( cubeA ){
 
@@ -341,6 +280,25 @@
                     });
                 });
 
+                setTimeout((function( a, b ){
+
+                    return function(){
+
+                        // Crafty.e( 'WallCube' ).wallCube({
+                        //     x: a[ 1 ] * 32,
+                        //     y: a[ 0 ] * 32,
+                        //     color: 'red'
+                        // });
+
+                        // Crafty.e( 'WallCube' ).wallCube({
+                        //     x: b[ 1 ] * 32,
+                        //     y: b[ 0 ] * 32,
+                        //     color: 'red'
+                        // });
+                    };
+                })(connectA, connectB), 6000 );
+                
+
                 // 将这两个点连接起来
                 // 从A到B
                 var cntARow = connectA[ 0 ];
@@ -353,7 +311,7 @@
                 var itrRow = ( cntBRow - cntARow > 0 ) ? 1 : - 1;
                 var itrCol = ( cntBCol - cntACol > 0 ) ? 1 : - 1;
 
-                while( moveRow !== cntBRow && moveCol !== cntBCol ){
+                while( moveRow !== cntBRow || moveCol !== cntBCol ){
 
                     if( moveRow !== cntBRow ){
 
@@ -370,17 +328,42 @@
                     }
                 }
 
-                blockConnectInfo[ tagName ]+= '@' + targetTag + '@';
+                // 想一个块的联通信息中添加另一个块的信息
+                function addTag( beAddedTag, addedTag ){
+
+                    // 添加本身
+                    if( blockConnectInfo[ beAddedTag ].indexOf( '@' + addedTag + '@' ) < 0 ){
+
+                        blockConnectInfo[ beAddedTag ] += ( '@' + addedTag + '@' );
+                    }    
+
+                    _.each( blockConnectInfo[ addedTag ].split(/@|@@/), function(tag){
+
+                        if( tag && blockConnectInfo[ beAddedTag ].indexOf( '@' + tag + '@' ) < 0 ){
+
+                            blockConnectInfo[ beAddedTag ] += ( '@' + tag + '@' );   
+                        }
+                    });
+                }
+
+                addTag( tagName, targetBlockTag );
+                addTag( targetBlockTag, tagName );
 
                 _.each( blockConnectInfo, function( connectStr, tag ){
 
-                    if( connectStr.indexOf( '@' + tagName + '@' ) ){
+                    if( connectStr.indexOf( '@' + tagName + '@' ) >= 0 ){
 
-                        blockConnectInfo[ tag ]+= '@' + targetTag + '@';
+                        addTag( tag, targetBlockTag );
                     }
-                })
-                
-            }
+
+                    if( connectStr.indexOf( '@' + targetBlockTag + '@' ) >= 0  ){
+
+                        addTag( tag, tagName );
+                    }
+                });
+            });
+
+            console.log( blockConnectInfo );
 
 
             return mapArray;
