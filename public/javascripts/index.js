@@ -2,7 +2,7 @@ requirejs.config({
     baseUrl: '/javascripts/'
 });
 
-requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'bean', 'pacman' ], function(){
+requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'monster', 'bean', 'pacman' ], function(){
     Crafty.init( 640, 320 );
     Crafty.background('#0571a9');
 
@@ -39,6 +39,7 @@ requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'bean', 'pacman' ], func
     var mapGenerator = Crafty.e( 'MapGenerator' );
     var mapArray = mapGenerator.randomMap( 20, 10 );
     var pacman;
+    var monster;
 
     Crafty.e( 'Wall' ).wall({
         map: mapArray 
@@ -50,10 +51,17 @@ requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'bean', 'pacman' ], func
 
             if( ifWall === 0 ){
 
+                if( pacman !== undefined && monster === undefined ){
+
+                    monster = Crafty.e( '2D, Canvas, Monster, RandomPosition' ).attr({ x: col * 32, y: row * 32, z: 100 });
+                }
+
                 if( pacman === undefined ){
 
                     pacman = Crafty.e( '2D, Canvas, Pacman, RandomPosition' ).attr({ x: col * 32, y: row * 32 });
                 }
+
+                
                 else {
 
                     // 画一颗豆子
