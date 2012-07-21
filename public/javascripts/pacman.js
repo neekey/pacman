@@ -9,57 +9,14 @@ Crafty.audio.add({
 
 Crafty.c( 'Pacman', {
     init: function(){
-        this.requires( 'idle, SpriteAnimation, Collision, Fourway' )
-        this.fourway( 3 );
-        this.attr({
-            w: 32,
-            h: 32
-        });
+        this.requires( 'Role, idle' )
+            .fourway( 3 );
 
         // 设置移动动画
         this.animate( 'walk_left', 0, 0, 1 )
             .animate( 'walk_up', 2, 0, 3 )
             .animate( 'walk_right', 4, 0, 5 )
             .animate( 'walk_down', 6, 0, 7 );
-
-        this.bind( 'NewDirection', function (direction) {
-                if (direction.x < 0) {
-                    if (!this.isPlaying("walk_left"))
-                        this.stop().animate("walk_left", 10, -1);
-                }
-                if (direction.x > 0) {
-                    if (!this.isPlaying("walk_right"))
-                        this.stop().animate("walk_right", 10, -1);
-                }
-                if (direction.y < 0) {
-                    if (!this.isPlaying("walk_up"))
-                        this.stop().animate("walk_up", 10, -1);
-                }
-                if (direction.y > 0) {
-                    if (!this.isPlaying("walk_down"))
-                        this.stop().animate("walk_down", 10, -1);
-                }
-                if(!direction.x && !direction.y) {
-                    this.stop();
-                }
-        } );
-
-        // 防止 吃豆人走出跑到地图
-        this.bind( 'Moved', function( from ){
-
-            var newX = this.attr( 'x' );
-            var newY = this.attr( 'y' );
-            var w = this.attr( 'w' );
-            var h = this.attr( 'h' );
-
-            if( this.hit( 'WallCube' ) ){
-
-                this.attr({
-                    x: from.x,
-                    y: from.y
-                });
-            }
-        });
     }
 });
 

@@ -2,7 +2,7 @@ requirejs.config({
     baseUrl: '/javascripts/'
 });
 
-requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'monster', 'bean', 'pacman' ], function(){
+requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'role', 'monster', 'bean', 'pacman' ], function(){
     Crafty.init( 640, 320 );
     Crafty.background('#0571a9');
 
@@ -53,12 +53,12 @@ requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'monster', 'bean', 'pacm
 
                 if( pacman !== undefined && monster === undefined ){
 
-                    monster = Crafty.e( '2D, Canvas, Monster, RandomPosition' ).attr({ x: col * 32, y: row * 32, z: 100 });
+                    monster = Crafty.e( 'Monster' ).attr({ x: col * 32, y: row * 32, z: 100 });
                 }
 
                 if( pacman === undefined ){
 
-                    pacman = Crafty.e( '2D, Canvas, Pacman, RandomPosition' ).attr({ x: col * 32, y: row * 32 });
+                    pacman = Crafty.e( 'Pacman' ).attr({ x: col * 32, y: row * 32, z: 100 });
                 }
 
                 
