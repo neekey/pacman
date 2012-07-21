@@ -10,10 +10,10 @@ Crafty.audio.add({
 Crafty.c( 'Pacman', {
     init: function(){
         this.requires( 'idle, SpriteAnimation, Collision, Fourway' )
-        this.fourway( 2 );
+        this.fourway( 3 );
         this.attr({
-            w: 25,
-            h: 25
+            w: 32,
+            h: 32
         });
 
         // 设置移动动画
