@@ -25,8 +25,6 @@ Crafty.c( 'Role', {
 
             var newX = this.attr( 'x' );
             var newY = this.attr( 'y' );
-            var w = this.attr( 'w' );
-            var h = this.attr( 'h' );
 
             if( this.hit( 'WallCube' ) ){
 
