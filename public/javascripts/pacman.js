@@ -18,7 +18,7 @@
     Crafty.c( 'Pacman', {
         init: function(){
             this.requires( 'Role, idle' )
-                .fourway( 2 );
+                .fourway( 2.5 );
 
             // 设置移动动画
             this.animate( 'walk_left', 0, 0, 1 )

@@ -13,8 +13,8 @@ requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'role', 'monster', 'bean
         ]
     });
 
-    var mapGenerator = Crafty.e( 'MapGenerator' );
-    var mapArray = mapGenerator.randomMap( 20, 10 );
+    var pacmanMap = Crafty.e( 'PacmanMap' ).pacmanMap( 20, 10 );
+    var mapArray = pacmanMap.attr( 'mapArray' );
     var pacman;
     var monster;
 
@@ -22,31 +22,36 @@ requirejs( [ 'underscore', 'crafty-min', 'map', 'wall', 'role', 'monster', 'bean
         map: mapArray 
     });
 
-    _.each( mapArray, function( rows, row ){
+    // 画豆子
+    _.each( pacmanMap.attr( 'noWallArray' ), function( cube ){
 
-        _.each( rows, function( ifWall, col ){
-
-            if( ifWall === 0 ){
-
-                if( pacman !== undefined && monster === undefined ){
-
-                    monster = Crafty.e( 'Monster' ).monster( mapArray ).attr({ x: col * 32, y: row * 32, z: 100 });
-                }
-
-                if( pacman === undefined ){
-
-                    pacman = Crafty.e( 'Pacman' ).attr({ x: col * 32, y: row * 32, z: 100 });
-                }
-
-                
-                else {
-
-                    // 画一颗豆子
-                    Crafty.e( 'Bean' ).bean( col * 32 + 10, row * 32 + 10 );  
-                }
-            }
-        })
+        // 画一颗豆子
+        Crafty.e( 'Bean' ).bean( cube[ 1 ] * 32 + 10, cube[ 0 ] * 32 + 10 );  
     });
+
+    var roleArray = pacmanMap.getRandomNoWallCubes( 5 );
+
+    console.log( roleArray );
+
+    // 画妖怪
+    _.each( roleArray, function( cube, index ){
+
+        if( index === 0 ){
+
+            // 画吃豆人
+            pacman = Crafty.e( 'Pacman' ).attr({ x: cube[ 1 ] * 32, y: cube[ 0 ] * 32, z: 100 });   
+
+
+        }
+        else  {
+
+            Crafty.e( 'Monster' ).monster( mapArray ).attr({ x: cube[ 1 ] * 32, y: cube[ 0 ] * 32, z: 100 });   
+        }
+
+        console.log( arguments );
+
+        console.log( roleArray[ 0 ][ 1 ] * 32, roleArray[ 0 ][ 0 ] * 32 );
+    })
 
     // Crafty.audio.play( 'bgMusic', -1, 0.1 );
 
