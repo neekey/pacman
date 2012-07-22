@@ -5,6 +5,7 @@
     });
     
     Crafty.c( 'Bean', {
+        gameInfo: undefined,
         init: function(){
 
             var that = this;
@@ -14,6 +15,7 @@
             this.onHit( 'Pacman', function(){
 
                 Crafty.audio.play( 'eat', 1, 0.2 );
+                that.gameInfo.addBean();
                 that.destroy();
             });
 
@@ -38,14 +40,16 @@
             
         },
 
-        bean: function( x, y ){
+        bean: function( x, y, gameInfo ){
 
             this.attr({
                 x: x,
                 y: y,
                 w: 15,
                 h: 15
-            })
+            });
+
+            this.gameInfo = gameInfo;
         }
     });
 
