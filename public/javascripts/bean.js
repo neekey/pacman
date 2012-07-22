@@ -1,4 +1,8 @@
 (function (argument) {
+
+    Crafty.sprite(15, "/images/bean.png", {
+        bean: [ 0, 0 ]
+    });
     
     Crafty.c( 'Bean', {
         init: function(){
@@ -6,6 +10,7 @@
             var that = this;
 
             this.requires( '2D, Canvas, bean, Collision, SpriteAnimation' );
+            this.collision( new Crafty.polygon([ 0, 0 ], [ 10, 0 ], [ 10, 10 ], [ 0, 10 ]) );
             this.onHit( 'Pacman', function(){
 
                 Crafty.audio.play( 'eat', 1, 0.2 );

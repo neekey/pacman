@@ -4,6 +4,10 @@
 
 (function function_name (argument) {
 
+    Crafty.sprite(32, "/images/wall.png", {
+        wall: [ 0, 0 ]
+    });
+
     Crafty.c( 'WallCube', {
         init: function(){
             this.requires( '2D, Canvas, Solid, wall, Collision, SpriteAnimation' );
