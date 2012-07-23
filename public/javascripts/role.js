@@ -10,7 +10,7 @@ Crafty.c( 'Role', {
         var that = this;
 
         // 具有动画、四个方向行走、可以被碰撞
-        this.requires( '2D, Canvas, SpriteAnimation, Fourway' )
+        this.requires( '2D, Canvas, SpriteAnimation, Tween, Fourway' )
         // 设置速度    
         this.fourway( 2 )
         // 宽高为32

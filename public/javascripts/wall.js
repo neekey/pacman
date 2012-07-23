@@ -12,9 +12,9 @@
         init: function(){
             this.requires( '2D, Canvas, Solid, wall, Collision, SpriteAnimation' );
             this.attr({ w: 32, h: 32 });
-            this.collision(
-                new Crafty.polygon([ 5, 5 ], [ 27, 5], [ 27,27 ], [ 5, 27 ])
-            );
+            // this.collision(
+            //     new Crafty.polygon([ 5, 5 ], [ 27, 5], [ 27,27 ], [ 5, 27 ])
+            // );
             this.animate( 'wallBlink', 0, 0, 3 );
 
             var that = this;

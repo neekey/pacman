@@ -15,6 +15,9 @@
                 .animate( 'walk_up', 8, 0, 11 )
                 .animate( 'walk_left', 12, 0, 15 );
 
+            this.collision( new Crafty.polygon([ 0, 15 ], [ 26, 8 ], [ 26, 16 ], [ 29, 29 ], [ 2, 29 ], [ 4, 16 ], [ 4, 8 ]) );
+
+
             var walkDirs = [ 'left', 'up', 'right', 'down' ];
             var walkDir = getRandomDir();
             var preX = this.x;
