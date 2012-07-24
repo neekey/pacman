@@ -1,4 +1,4 @@
-(function(){
+define(function(){
 
     Crafty.c( 'PacmanMap', {
 
@@ -817,4 +817,4 @@
             }   
         }
     });
-})();
+});

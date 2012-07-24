@@ -1,4 +1,4 @@
-(function(){
+define(function(){
 
     Crafty.audio.add({
         eat: [
@@ -35,6 +35,7 @@
                 .animate( 'pacman-die', 0, 1, 0 );
 
             var ifDie = false;
+            var that = this;
 
             this.onHit( 'Monster', function(){
 
@@ -42,14 +43,19 @@
 
                     this.disableControl();
                     this.stop();
-                    this.animate( 'pacman-die', 10, -1 ).tween( {alpha: 0.0 }, 30 );
+                    this.animate( 'pacman-die', 10, -1 ).tween( {alpha: 0.0, y: this.y - 20 }, 30 );
                     Crafty.audio.play( 'die', 1, 0.2 );  
 
                     ifDie = true; 
+
+                    setTimeout(function(){
+
+                        that.destroy();
+                    }, 500 );
                 }
                 
             });
         }
     });
 
-})();
+});

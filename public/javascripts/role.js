@@ -2,7 +2,7 @@
  * 游戏中可以移动的生物的基类（吃豆人、怪物）
  */
 
- (function(){
+define(function(){
 
 Crafty.c( 'Role', {
     init: function(){
@@ -111,7 +111,77 @@ Crafty.c( 'Role', {
                 this.x++;
             }
         }
-    } 
+    },
+
+    /**
+     * 根据当前的x,y 计算在地图中的row, col坐标
+     */
+    getCurrentMapCoor: function(){
+
+        var mapRow;
+        var mapCol;
+        var that = this;
+
+        if( that.y % that.h / that.h <= 0.5 ){
+
+            mapRow = Math.floor( that.y / that.h );
+        }
+        else {
+
+            mapRow = Math.ceil( that.y / that.h );    
+        }
+
+        if( that.x % that.w / that.w <= 0.5 ){
+
+            mapCol = Math.floor( that.x / that.w );
+        }
+        else {
+            mapCol = Math.ceil( that.x / that.w );  
+        }
+
+        return {
+            row: mapRow,
+            col: mapCol
+        }
+    },
+
+    /**
+     * 获取当前位置的可用方向
+     */
+    getAvaliableDir: function(){
+
+        var mapCoor = getCurrentMapCoor();
+        var mapRow = mapCoor.row;
+        var mapCol = mapCoor.col;
+        var that = this;
+
+        var avaliableDirs = [];
+
+        if( that.wallMap[ mapRow - 1 ] && that.wallMap[ mapRow - 1 ][ mapCol ] === 0 ) {
+            avaliableDirs.push( 'up' );
+        }
+        if( that.wallMap[ mapRow ] && that.wallMap[ mapRow ][ mapCol - 1 ] === 0 ) {
+            avaliableDirs.push( 'left' );
+        }
+        if( that.wallMap[ mapRow ] && that.wallMap[ mapRow ][ mapCol + 1 ] === 0 ) {
+            avaliableDirs.push( 'right' );
+        }
+        if( that.wallMap[ mapRow + 1 ] && that.wallMap[ mapRow + 1 ][ mapCol ] === 0 ) {
+            avaliableDirs.push( 'down' );
+        }
+
+        return avaliableDirs;
+    },
+
+    /**
+     * 根据给定的方向获取其相反方向
+     */
+    getOppositeDirection: function( dir ){
+
+        return dir === 'left' && 'right' ||
+            dir === 'right' && 'left' ||
+            dir === 'up' && 'down' || 'up';
+    }
 });
 
-})();
+});

@@ -2,7 +2,7 @@
  * 墙壁
  */
 
-(function function_name (argument) {
+define(function function_name (argument) {
 
     Crafty.sprite(32, "/images/wall.png", {
         wall: [ 0, 0 ]
@@ -127,4 +127,4 @@
             wallCubes.push( newCube );
         }
     })
-})();
+});

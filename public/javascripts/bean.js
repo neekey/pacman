@@ -1,4 +1,4 @@
-(function (argument) {
+define(function (argument) {
 
     Crafty.sprite(15, "/images/bean.png", {
         bean: [ 0, 0 ]
@@ -54,4 +54,4 @@
     });
 
 
-})();
+});

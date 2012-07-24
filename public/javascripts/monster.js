@@ -1,4 +1,4 @@
-(function(){
+define(function(){
 
     Crafty.sprite( 32, 'images/monster.png', {
 
@@ -231,4 +231,4 @@
             return this;
         }
     })
-})();
+});

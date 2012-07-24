@@ -1,7 +1,7 @@
 /**
  * 下方显示游戏信息
  */
-(function(){
+define(function(){
 
     Crafty.c( 'PacmanLiveIcon', {
         init: function(){
@@ -58,4 +58,4 @@
     });
 
     
-})();
+});
